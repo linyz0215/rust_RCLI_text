@@ -61,15 +61,6 @@ fn parse_format(format: &str) -> Result<OutputFormat, anyhow::Error> {//这个an
     format.parse()//parse调用FromStr trait 将字符串转换成其他类型（前提是要实现FromStr）
 }
 
-impl From<OutputFormat> for &'static str {//把枚举值转换成对应的静态字符串字面量
-    fn from(format: OutputFormat) -> Self {//实现了From trait后 可以用Into trait自动转换，也就是说可以从OutputFormat转换成&'static str
-                                           //也可以从&'static str转换成OutputFormat
-        match format {
-            OutputFormat::Json => "json",
-            OutputFormat::Yaml => "yaml",
-        }
-    }
-}
 
 impl FromStr for OutputFormat {//从字符串到枚举的转换
     type Err = anyhow::Error;
@@ -78,14 +69,22 @@ impl FromStr for OutputFormat {//从字符串到枚举的转换
         match s.to_lowercase().as_str() {
             "json" => Ok(OutputFormat::Json),
             "yaml" | "yml" => Ok(OutputFormat::Yaml),
-            _ => Err(anyhow::anyhow!("Unsupported output format. Supported formats are: json, toml, yaml.")),
+            _ => Err(anyhow::anyhow!("Unsupported output format. Supported formats are: json, yaml.")),
         }
     }
 }
 
+impl OutputFormat {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            OutputFormat::Json => "json",
+            OutputFormat::Yaml => "yaml",
+        }
+    }
+}
 
 impl fmt::Display for OutputFormat {//实现Display trait 用于格式化输出
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f,"{}",Into::<&str>::into(self.clone()))
+        write!(f,"{}",Into::<&str>::into(self.as_str()))
     }
 }

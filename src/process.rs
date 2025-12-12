@@ -1,10 +1,8 @@
 use serde::{Deserialize, Serialize};
-use toml::ser;
 use std::fs;
 use csv::Reader;
 use anyhow::Result;
 use serde_json::Value;
-use serde_json::json;
 use crate::opts::OutputFormat;
 #[derive(Debug, Serialize, Deserialize)]
 
@@ -28,8 +26,6 @@ pub fn process_csv(input: &str, output: String, format: OutputFormat) -> Result<
     for result in reader.records() {//two mutable borrow issue 用clone()
         //1、
         let record= result?;
-        let iter = headers.iter().zip(record.iter());
-
         let json_value = headers.iter().zip(record.iter()).collect::<Value>();
 
         ret.push(json_value);
