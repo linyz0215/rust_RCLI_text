@@ -1,6 +1,6 @@
-use clap::Parser;
+use clap::{Parser};
 
-use RCLI::{Opts, SubCommand, process_csv, process_genpass};
+use RCLI::{Base64SubCommand, Opts, SubCommand, process_csv, process_genpass, process_encode, process_decode};
 use anyhow::Result;
 
 fn main() -> Result<()> {
@@ -18,6 +18,14 @@ fn main() -> Result<()> {
 
         SubCommand::GenPass(opts) => {
             process_genpass(opts.length, opts.uppercase, opts.lowercase, opts.numbers, opts.symbols)?;
+        }
+        SubCommand::Base64(subcmd) => match subcmd {
+            Base64SubCommand::Encode(opts) => {
+                process_encode(&opts.input, opts.format)?;
+            }
+            Base64SubCommand::Decode(opts) => {
+                process_decode(&opts.input, opts.format)?;
+            }
         }
     }
     Ok(())

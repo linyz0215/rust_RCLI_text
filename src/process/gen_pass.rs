@@ -25,7 +25,7 @@ pub fn process_genpass(length: u8, upper:bool, lower: bool, number: bool, symbol
     if symbol {
         chars.extend_from_slice(SYMBOL);
         password.push(*SYMBOL.choose(&mut rng).expect("SYMBOL won't be empty"));
-    }
+    }   
 
     for _ in 0..(length - password.len() as u8) {
         let c = chars.choose(&mut rng).expect("chars won't be empty");
