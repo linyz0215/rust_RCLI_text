@@ -1,4 +1,4 @@
-use crate::Base64Format;
+use crate::{Base64Format, get_reader};
 use base64::prelude::*;
 use base64::{engine::general_purpose::{STANDARD,URL_SAFE_NO_PAD},
 };
@@ -6,11 +6,7 @@ use base64::{engine::general_purpose::{STANDARD,URL_SAFE_NO_PAD},
 
 use std::{fs::File, io::{Read}};
 pub fn process_encode(input: &str, format: Base64Format) -> anyhow::Result<()> {
-    let mut reader:Box<dyn Read> = if input == "-" {
-        Box::new(std::io::stdin())
-    } else {
-        Box::new(File::open(input)?)
-    };
+    let mut reader = get_reader(input)?;
     let mut buf = Vec::new();
     reader.read_to_end(&mut buf)?;
     let encoded = match format {
@@ -23,11 +19,7 @@ pub fn process_encode(input: &str, format: Base64Format) -> anyhow::Result<()> {
 }
 
 pub fn process_decode(input: &str, format: Base64Format) -> anyhow::Result<()> {
-    let mut reader:Box<dyn Read> = if input == "-" {
-        Box::new(std::io::stdin())
-    } else {
-        Box::new(File::open(input)?)
-    };
+    let mut reader:Box<dyn Read> = get_reader(input)?;
     let mut buf = String::new();
     reader.read_to_string(&mut buf)?;
     let buf = buf.trim();
@@ -56,7 +48,7 @@ mod tests {
 
     #[test]
     fn test_process_decode(){
-        let input = "aGVsbG8gd29ybGQhDQo=";
+        let input = "tmp.b64";
         let format = Base64Format::UrlSafe;
         process_decode(input, format).unwrap();
     }
