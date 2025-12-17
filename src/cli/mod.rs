@@ -10,7 +10,7 @@ use self::{csv::CsvOpts, genpass::GenPassOpts};
 pub use self::{
     csv::OutputFormat,
     base64::{Base64SubCommand, Base64Format},
-    text::{TestSubCommand,TextSignFormat}
+    text::{TestSubCommand,TextSignFormat,TextKeyGenerateOpts}
 };
 #[derive(Debug, Parser)]
 #[command(name = "rcli", version, author, about = "lalalalallalalal、", long_about = None)]

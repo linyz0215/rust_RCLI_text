@@ -22,6 +22,7 @@ pub struct TextSignOpts {
     pub key: String,
     #[arg(long, default_value = "blake3", value_parser = parse_format)]
     pub format:  TextSignFormat,
+
 }
 
 #[derive(Debug, Parser)]
@@ -34,6 +35,12 @@ pub struct TextVerifyOpts {
     pub format:  TextSignFormat,
     #[arg(short, long)]
     pub  sig: String,
+}
+
+#[derive(Debug, Parser)]
+pub struct TextKeyGenerateOpts {
+    #[arg(short, long, default_value = "blake3", value_parser = parse_format)]
+    pub output: TextSignFormat,
 }
 
 #[derive(Debug, Clone, Copy)]

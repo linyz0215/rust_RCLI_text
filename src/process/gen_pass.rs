@@ -5,8 +5,7 @@ const UPPER: &[u8]= b"ABCDEFGHJKLMNPQRSTUVWXYZ";
 const LOWER: &[u8] = b"abcdefghijkmnopqrstuvwxyz";
 const NUMBER: &[u8] = b"123456789";
 const SYMBOL: &[u8] = b"!@#$%^&*_";
-use zxcvbn::zxcvbn;
-pub fn process_genpass(length: u8, upper:bool, lower: bool, number: bool, symbol: bool) -> Result<()> {
+pub fn process_genpass(length: u8, upper:bool, lower: bool, number: bool, symbol: bool) -> Result<String> {
     let mut rng = rand::rng();
     let mut password = Vec::new();
     let mut chars = Vec::new();
@@ -35,11 +34,5 @@ pub fn process_genpass(length: u8, upper:bool, lower: bool, number: bool, symbol
     //TODO: make sure the password contains at least one char from each type
     password.shuffle(&mut rng);
     let password = String::from_utf8(password)?;
-
-    println!("{}", password);
-
-    //output password strength
-    let estimate = zxcvbn(&password, &[]);
-    eprintln!("Password strength: {}", estimate.score());
-    Ok(())
+    Ok(password)
 }
